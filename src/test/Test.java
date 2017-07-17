@@ -15,6 +15,7 @@ import util.SqlSessionFactory;
 import vo.User;
 
 public class Test {
+	int a = 10;
     @Ignore
 	@org.junit.Test
 	public void test(){
