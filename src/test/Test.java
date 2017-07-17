@@ -7,6 +7,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Before;
 import org.junit.Ignore;
 
+import com.sun.accessibility.internal.resources.accessibility;
+
 import dao.UserMapper;
 import service.Service;
 import service.UserServiceImpl;
@@ -14,6 +16,7 @@ import util.SqlSessionFactory;
 import vo.User;
 
 public class Test {
+	int a = 10;
     @Ignore
 	@org.junit.Test
 	public void test(){
