@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MyBatis的配置文件 -->
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 可以通过properties标签来引用一个properties文件 -->
+	<properties resource="jdbc.properties"></properties>
+
+	<!-- 引用到实体类为实体类起较短的名字 -->
+	<typeAliases>
+		<typeAlias type="vo.User" alias="User" />
+	</typeAliases>
+
+	<!-- 配置运行环境 -->
+	<environments default="mysql">
+		<!-- 配置其中一个运行环境 id标识具体的哪一个运行环境 -->
+		<environment id="mysql">
+			<transactionManager type="JDBC"/>
+			<!-- 链接数据源 -->
+			<dataSource type="POOLED">
+				<!-- 数据库的驱动类 -->
+				<property name="driver" value="${jdbc.driver}" />
+				<!-- 数据库的链接的URL -->
+				<property name="url" value="${jdbc.url}" />
+				<!-- 数据库的用户名 -->
+				<property name="username" value="${jdbc.username}" />
+				<!-- 数据库的密码 -->
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="dao/userMapper.xml" />
+	</mappers>
+	
+</configuration>

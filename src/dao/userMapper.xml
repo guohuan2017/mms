@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 对应实体类的SQL映射文件 -->
+<!-- 命名空间以及标签规范 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 负责关联到DAO层的 UserMapper -->
+<mapper namespace="dao.UserMapper">
+	<cache />
+	
+	<!-- 对应的增删改查代码 id和DAO下的UserMapper中的方法名相同 #{}占位符 useGeneratedKeys使用数据库的主键自动增长 -->
+	<insert id="insertUser" parameterType="vo.User"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user
+		(username,password)
+		values(#{username}, #{password})
+	</insert>
+	
+	<insert id="insertByUsernamePassword" parameterType="String">
+		insert into user
+		(username,password)
+		values(#{0}, #{1})
+	</insert>
+	
+	<update id="updateUser" parameterType="vo.User">
+		update user
+		<set>
+			<if test="password != null">password = #{password},</if>
+			<if test="username != null">username = #{username},</if>
+		</set>
+		<trim prefix="where" suffixOverrides="and | or" prefixOverrides="and | or">
+			username = #{username}
+		</trim>
+		
+	</update>
+	
+	<delete id="deleteUser" parameterType="vo.User">
+		delete from user where username = #{username}
+	</delete>
+	
+	<select id="selectById" parameterType="Integer" resultType="vo.User">
+		select * from user where id = #{id}
+	</select>
+	
+	<select id="selectByUsername2" parameterType="java.lang.String" resultType="vo.User">
+		select * from user where username = #{username}
+	</select>
+	
+	
+	<resultMap id="userResultMap" type="User">
+		<id property="id" column="id"></id>
+		<result property="username" column="username"></result>
+		<result property="password" column="password"></result>
+	</resultMap>
+	
+	<resultMap id="userConstructorMap" type="User">
+		<constructor>
+			<idArg column="id" javaType="java.lang.Integer"></idArg>
+			<arg column ="username" javaType="java.lang.String"></arg>
+			<arg column ="password" javaType="java.lang.String"></arg>
+		</constructor>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="userResultMap">
+		select * from user
+	</select>
+	
+	
+	<select id="selectId" parameterType="User" resultType="Integer">
+	    select * from user where username=#{username}
+	    <if test="password != ''">
+	        and password = #{password}
+	    </if>
+	</select>
+	 
+	 <select id="selectByUsername" parameterType="java.lang.String" resultMap="userResultMap">
+	    select * from user where username=#{1}
+	</select>
+	
+	<select id="selectByUsernamePassword" parameterType="User" resultMap="userConstructorMap">
+	    select * from user where
+	    <choose>
+		    <when test="username != null and username != ''">username=#{username}</when>
+		    <when test="password != null and password != ''">and password=#{password}</when>
+		    <otherwise>1 = 1</otherwise>
+	    </choose>
+	</select>
+
+	<select id="selectByUsernamePassword2"  resultMap="userConstructorMap">
+		select * from user where id = #{0} and username = #{1}
+	</select>
+	
+	<select id="selectByIdList" resultMap="userConstructorMap">
+		select * from user where id in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	
+</mapper>
